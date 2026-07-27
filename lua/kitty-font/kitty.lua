@@ -72,6 +72,20 @@ local function build_load_args(config, font)
   return args
 end
 
+---@param config kitty_font.Config
+---@param padding string|number|nil
+---@return string[]
+local function build_padding_args(config, padding)
+  local args = { "load-config" }
+  local value = padding or config.padding
+
+  if is_set(value) then
+    vim.list_extend(args, { "-o", "window_padding_width=" .. tostring(value) })
+  end
+
+  return args
+end
+
 ---@return boolean
 function M.available()
   return vim.fn.executable(KITTY_EXE) == 1
@@ -116,6 +130,23 @@ function M.switch(config, font)
   end
 
   return M.apply(config, font)
+end
+
+---@param config kitty_font.Config
+---@param padding string|number|nil
+---@return any?, string?
+function M.apply_padding(config, padding)
+  local value = padding or config.padding
+  if not is_set(value) then
+    return fail("No padding value provided")
+  end
+
+  local cmd, err = build_command(build_padding_args(config, padding))
+  if not cmd then
+    return nil, err
+  end
+
+  return run(cmd)
 end
 
 ---@return any?, string?
