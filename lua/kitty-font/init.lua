@@ -48,6 +48,10 @@ function M.setup(opts)
     M.apply({ silent = true })
   end
 
+  if is_set(M.config.padding) then
+    M.set_padding(nil, { silent = true })
+  end
+
   return M.config
 end
 
