@@ -19,10 +19,12 @@ require("kitty-font").setup({
   font_family = "IosevkaTerm Nerd Font", -- default nil, uses kitty.conf
   font_size = 16, -- default nil, uses kitty.conf
   padding = "0 0", -- default nil, uses kitty.conf; accepts 1–4 values (CSS-style)
-  padding_step = 2, -- default: 2
   restore_on_exit = true, -- default: true
 })
 ```
+
+Leaving `padding` unset (nil, the default) means kitty.conf's configured value is used.
+`:PaddingReset` is the command to return to that value at runtime after changing it.
 
 `font_family` is used as the default family applied on startup and as the
 initial selection basis for `FontPick`.
@@ -48,12 +50,6 @@ split. That means every tab and split inside that window changes together.
 
 `PaddingSet [top] [right] [bottom] [left]`
 : Set Kitty window padding using `kitty @ set-spacing`. Accepts 0–4 space-separated numeric values, mirroring Kitty's own CSS-style padding syntax. Passing no arguments applies the configured `padding` value. Example: `:PaddingSet 0 0`.
-
-`PaddingIncrease`
-: Increase padding by `padding_step`.
-
-`PaddingDecrease`
-: Decrease padding by `padding_step`, clamped at 0.
 
 ## Health
 
