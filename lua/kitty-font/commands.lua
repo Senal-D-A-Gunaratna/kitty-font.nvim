@@ -33,20 +33,6 @@ function M.setup(api)
     force = true,
   })
 
-  vim.api.nvim_create_user_command("PaddingIncrease", function()
-    api.padding_increase()
-  end, {
-    desc = "Increase Kitty window padding",
-    force = true,
-  })
-
-  vim.api.nvim_create_user_command("PaddingDecrease", function()
-    api.padding_decrease()
-  end, {
-    desc = "Decrease Kitty window padding",
-    force = true,
-  })
-
   vim.api.nvim_create_user_command("PaddingReset", function()
     api.reset_padding()
   end, {
