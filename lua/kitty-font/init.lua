@@ -17,6 +17,7 @@ local autocmds = require("kitty-font.autocmds")
 ---@field set_padding fun(padding?: string|number, opts?: kitty_font.ApplyOpts): boolean?, string?
 ---@field padding_increase fun(opts?: kitty_font.ApplyOpts): boolean?, string?
 ---@field padding_decrease fun(opts?: kitty_font.ApplyOpts): boolean?, string?
+---@field reset_padding fun(opts?: kitty_font.ApplyOpts): boolean?, string?
 ---@field health fun()
 
 ---@type kitty_font.API
@@ -181,6 +182,27 @@ function M.padding_decrease(opts)
   M.config.padding = math.max(0, current - M.config.padding_step)
 
   return M.set_padding(nil, opts)
+end
+
+---@param opts kitty_font.ApplyOpts?
+---@return boolean?, string?
+function M.reset_padding(opts)
+  opts = opts or {}
+
+  local result, err = kitty.reset_padding()
+  if not result then
+    if not opts.silent then
+      notify("PaddingReset: " .. err, vim.log.levels.ERROR)
+    end
+
+    return nil, err
+  end
+
+  if not opts.silent then
+    notify("Padding reset to default")
+  end
+
+  return true
 end
 
 ---@return table
