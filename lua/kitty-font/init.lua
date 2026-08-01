@@ -15,8 +15,6 @@ local autocmds = require("kitty-font.autocmds")
 ---@field get_fonts fun(): string[]
 ---@field pick fun(opts?: kitty_font.ApplyOpts)
 ---@field set_padding fun(padding?: string|number, opts?: kitty_font.ApplyOpts): boolean?, string?
----@field padding_increase fun(opts?: kitty_font.ApplyOpts): boolean?, string?
----@field padding_decrease fun(opts?: kitty_font.ApplyOpts): boolean?, string?
 ---@field reset_padding fun(opts?: kitty_font.ApplyOpts): boolean?, string?
 ---@field health fun()
 
@@ -160,28 +158,6 @@ function M.set_padding(padding, opts)
   end
 
   return true
-end
-
----@param opts kitty_font.ApplyOpts?
----@return boolean?, string?
-function M.padding_increase(opts)
-  opts = opts or {}
-
-  local current = tonumber(M.config.padding) or 0
-  M.config.padding = current + M.config.padding_step
-
-  return M.set_padding(nil, opts)
-end
-
----@param opts kitty_font.ApplyOpts?
----@return boolean?, string?
-function M.padding_decrease(opts)
-  opts = opts or {}
-
-  local current = tonumber(M.config.padding) or 0
-  M.config.padding = math.max(0, current - M.config.padding_step)
-
-  return M.set_padding(nil, opts)
 end
 
 ---@param opts kitty_font.ApplyOpts?
