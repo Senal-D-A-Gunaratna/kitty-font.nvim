@@ -77,6 +77,10 @@ COMMANDS                                                  *kitty-font-commands*
 :KittyReset
     Reset both the Kitty font and window padding to their kitty.conf values.
 
+                                                 *kitty-font.KittyApply*
+:KittyApply
+    Apply all configured font_family, font_size, and padding opts to Kitty.
+
 ==============================================================================
 API                                                          *kitty-font-api*
 
@@ -87,16 +91,20 @@ The Lua module exposes the following functions via the return value of
 setup(opts?)
     Configure and activate the plugin. See |kitty-font-setup|.
 
-                                                    *kitty-font.apply()*
+                                                     *kitty-font.apply()*
 apply(opts?)                                              *kitty-font.FontSet*
     Apply the configured font_family and font_size to Kitty.
 
+                                                *kitty-font.apply_all()*
+apply_all(opts?)
+    Apply the configured font_family, font_size, and padding to Kitty.
+
                                                      *kitty-font.reset()*
-reset(opts?)                                              *kitty-font.FontReset*
+reset(opts?)
     Reset Kitty font to its pre-plugin configuration.
 
                                                    *kitty-font.restore()*
-restore(opts?)                                          *kitty-font.KittyReset*
+restore(opts?)
     Reset both the Kitty font and window padding to their kitty.conf
     values.
 
@@ -104,18 +112,18 @@ restore(opts?)                                          *kitty-font.KittyReset*
 get_fonts()
     Return a list of font names from `fc-list`. Synchronous.
 
-                                                       *kitty-font.pick()*
-pick(opts?)                                               *kitty-font.FontPick*
+                                                        *kitty-font.pick()*
+pick(opts?)
     Open |vim.ui.select()| to pick a font interactively.
 
-                                                 *kitty-font.set_padding()*
-set_padding(padding, opts?)                               *kitty-font.PaddingSet*
+                                                  *kitty-font.set_padding()*
+set_padding(padding, opts?)
     Apply the given padding value to Kitty. `padding` can be a string of
     1-4 space-separated numbers, a single number, or nil (uses the configured
     default).
 
                                               *kitty-font.reset_padding()*
-reset_padding(opts?)                                      *kitty-font.PaddingReset*
+reset_padding(opts?)
     Reset Kitty padding to the value in kitty.conf.
 
                                                       *kitty-font.health()*

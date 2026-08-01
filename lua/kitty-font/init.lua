@@ -11,6 +11,7 @@ local autocmds = require("kitty-font.autocmds")
 ---@field config kitty_font.Config
 ---@field setup fun(opts?: kitty_font.ConfigOpts): kitty_font.Config
 ---@field apply fun(opts?: kitty_font.ApplyOpts): boolean?, string?
+---@field apply_all fun(opts?: kitty_font.ApplyOpts): boolean?, string?
 ---@field reset fun(opts?: kitty_font.ApplyOpts): boolean?, string?
 ---@field restore fun(opts?: kitty_font.ApplyOpts): boolean?, string?
 ---@field get_fonts fun(): string[]
@@ -71,6 +72,42 @@ function M.apply(opts)
 
   if not opts.silent then
     notify("Applied Kitty font settings")
+  end
+
+  return true
+end
+
+---@param opts kitty_font.ApplyOpts?
+---@return boolean?, string?
+function M.apply_all(opts)
+  opts = opts or {}
+
+  local font_result, font_err
+  if is_set(M.config.font_family) or M.config.font_size ~= nil then
+    font_result, font_err = M.apply({ silent = true })
+    if not font_result then
+      if not opts.silent then
+        notify("FontApply: " .. font_err, vim.log.levels.ERROR)
+      end
+
+      return nil, font_err
+    end
+  end
+
+  local padding_result, padding_err
+  if is_set(M.config.padding) then
+    padding_result, padding_err = M.set_padding(nil, { silent = true })
+    if not padding_result then
+      if not opts.silent then
+        notify("PaddingSet: " .. padding_err, vim.log.levels.ERROR)
+      end
+
+      return nil, padding_err
+    end
+  end
+
+  if not opts.silent then
+    notify("Applied Kitty font and padding settings")
   end
 
   return true
