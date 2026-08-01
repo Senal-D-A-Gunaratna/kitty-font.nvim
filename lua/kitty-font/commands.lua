@@ -39,6 +39,13 @@ function M.setup(api)
     desc = "Reset Kitty window padding to default",
     force = true,
   })
+
+  vim.api.nvim_create_user_command("KittyReset", function()
+    api.restore()
+  end, {
+    desc = "Reset Kitty font and padding",
+    force = true,
+  })
 end
 
 return M

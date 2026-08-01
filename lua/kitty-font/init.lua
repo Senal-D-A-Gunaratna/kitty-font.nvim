@@ -12,6 +12,7 @@ local autocmds = require("kitty-font.autocmds")
 ---@field setup fun(opts?: kitty_font.ConfigOpts): kitty_font.Config
 ---@field apply fun(opts?: kitty_font.ApplyOpts): boolean?, string?
 ---@field reset fun(opts?: kitty_font.ApplyOpts): boolean?, string?
+---@field restore fun(opts?: kitty_font.ApplyOpts): boolean?, string?
 ---@field get_fonts fun(): string[]
 ---@field pick fun(opts?: kitty_font.ApplyOpts)
 ---@field set_padding fun(padding?: string|number, opts?: kitty_font.ApplyOpts): boolean?, string?
@@ -91,6 +92,36 @@ function M.reset(opts)
 
   if not opts.silent then
     notify("Font reset to default")
+  end
+
+  return true
+end
+
+---@param opts kitty_font.ApplyOpts?
+---@return boolean?, string?
+function M.restore(opts)
+  opts = opts or {}
+
+  local result, err = kitty.reset()
+  if not result then
+    if not opts.silent then
+      notify("FontReset: " .. err, vim.log.levels.ERROR)
+    end
+
+    return nil, err
+  end
+
+  local padding_result, padding_err = kitty.reset_padding()
+  if not padding_result then
+    if not opts.silent then
+      notify("PaddingReset: " .. padding_err, vim.log.levels.ERROR)
+    end
+
+    return nil, padding_err
+  end
+
+  if not opts.silent then
+    notify("Restored Kitty font and padding settings")
   end
 
   return true

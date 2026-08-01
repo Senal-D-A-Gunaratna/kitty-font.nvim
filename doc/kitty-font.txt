@@ -41,8 +41,8 @@ Options~
         Use |kitty-font.PaddingReset| at runtime to return to that value.
 
     restore_on_exit ~
-        If true (the default), the plugin restores Kitty's font and size on
-        VimLeavePre.
+        If true (the default), the plugin restores Kitty's font and size and
+        resets window padding to kitty.conf on VimLeavePre.
 
 ==============================================================================
 COMMANDS                                                  *kitty-font-commands*
@@ -73,6 +73,10 @@ COMMANDS                                                  *kitty-font-commands*
     Reset Kitty window padding to the value in kitty.conf using
     `kitty @ set-spacing --all --configured padding=default`.
 
+                                                 *kitty-font.KittyReset*
+:KittyReset
+    Reset both the Kitty font and window padding to their kitty.conf values.
+
 ==============================================================================
 API                                                          *kitty-font-api*
 
@@ -90,6 +94,11 @@ apply(opts?)                                              *kitty-font.FontSet*
                                                      *kitty-font.reset()*
 reset(opts?)                                              *kitty-font.FontReset*
     Reset Kitty font to its pre-plugin configuration.
+
+                                                   *kitty-font.restore()*
+restore(opts?)                                          *kitty-font.KittyReset*
+    Reset both the Kitty font and window padding to their kitty.conf
+    values.
 
                                                   *kitty-font.get_fonts()*
 get_fonts()

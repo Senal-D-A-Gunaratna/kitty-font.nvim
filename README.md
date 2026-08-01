@@ -30,7 +30,9 @@ Leaving `padding` unset (nil, the default) means kitty.conf's configured value i
 initial selection basis for `FontPick`.
 
 The plugin applies whichever of `font_family` and `font_size` you set when it
-starts up, and restores the previous Kitty config on exit.
+starts up, and restores the previous Kitty config on exit. When
+`restore_on_exit` is enabled, window padding is reset to the `kitty.conf` value
+on exit as well.
 
 ## Limitations
 
@@ -47,6 +49,9 @@ split. That means every tab and split inside that window changes together.
 
 `PaddingReset`
 : Reset Kitty window padding to the value in `kitty.conf` using `kitty @ set-spacing padding=default`.
+
+`KittyReset`
+: Reset both the Kitty font and window padding to their `kitty.conf` values.
 
 `PaddingSet [top] [right] [bottom] [left]`
 : Set Kitty window padding using `kitty @ set-spacing`. Accepts 0–4 space-separated numeric values, mirroring Kitty's own CSS-style padding syntax. Passing no arguments applies the configured `padding` value. Example: `:PaddingSet 0 0`.
