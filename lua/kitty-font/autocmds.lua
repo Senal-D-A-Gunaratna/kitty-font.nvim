@@ -14,13 +14,13 @@ function M.setup(api)
 
   vim.api.nvim_create_autocmd("VimLeavePre", {
     group = group,
-    desc = "Restore Kitty font settings",
+    desc = "Restore Kitty font and padding settings",
     callback = function()
       if not api.config.restore_on_exit then
         return
       end
 
-      api.reset({ silent = true })
+      api.restore({ silent = true })
     end,
   })
 end

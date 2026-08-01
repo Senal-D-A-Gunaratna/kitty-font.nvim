@@ -72,6 +72,25 @@ local function build_load_args(config, font)
   return args
 end
 
+---@param value string|number
+---@return string[]?
+local function build_spacing_args(value)
+  local parts = vim.split(tostring(value), "%s+", { trimempty = true })
+  local count = #parts
+
+  if count == 1 then
+    return { "padding=" .. parts[1] }
+  elseif count == 2 then
+    return { "padding-v=" .. parts[1], "padding-h=" .. parts[2] }
+  elseif count == 3 then
+    return { "padding-top=" .. parts[1], "padding-h=" .. parts[2], "padding-bottom=" .. parts[3] }
+  elseif count == 4 then
+    return { "padding-top=" .. parts[1], "padding-right=" .. parts[2], "padding-bottom=" .. parts[3], "padding-left=" .. parts[4] }
+  end
+
+  return nil
+end
+
 ---@return boolean
 function M.available()
   return vim.fn.executable(KITTY_EXE) == 1
@@ -116,6 +135,42 @@ function M.switch(config, font)
   end
 
   return M.apply(config, font)
+end
+
+---@param config kitty_font.Config
+---@param padding string|number|nil
+---@return any?, string?
+function M.apply_padding(config, padding)
+  local value = padding or config.padding
+  if not is_set(value) then
+    return fail("No padding value provided")
+  end
+
+  local spacing_args = build_spacing_args(value)
+  if not spacing_args then
+    return fail("Invalid padding value: expected 1-4 space-separated numbers")
+  end
+
+  local args = { "set-spacing", "--all", "--configured" }
+  vim.list_extend(args, spacing_args)
+  local cmd, err = build_command(args)
+  if not cmd then
+    return nil, err
+  end
+
+  return run(cmd)
+end
+
+---@return any?, string?
+function M.reset_padding()
+  local cmd, err = build_command({
+    "set-spacing", "--all", "--configured", "padding=default",
+  })
+  if not cmd then
+    return nil, err
+  end
+
+  return run(cmd)
 end
 
 ---@return any?, string?
