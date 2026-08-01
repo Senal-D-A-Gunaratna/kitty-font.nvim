@@ -48,7 +48,7 @@ split. That means every tab and split inside that window changes together.
 : Open `vim.ui.select()` with fonts discovered asynchronously from `fc-list`.
 
 `PaddingReset`
-: Reset Kitty window padding to the value in `kitty.conf` using `kitty @ set-spacing padding=default`.
+: Reset Kitty window padding to the value in `kitty.conf` using `kitty @ set-spacing --all --configured padding=default`.
 
 `KittyReset`
 : Reset both the Kitty font and window padding to their `kitty.conf` values.

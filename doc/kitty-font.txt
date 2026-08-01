@@ -58,7 +58,7 @@ COMMANDS                                                  *kitty-font-commands*
     one switches Kitty to that font immediately via `kitty @ load-config`.
 
                                                    *kitty-font.PaddingSet*
-:[range]PaddingSet [top] [right] [bottom] [left]
+:PaddingSet [top] [right] [bottom] [left]
     Set Kitty window padding using `kitty @ set-spacing`. Accepts 0-4
     space-separated numeric values mirroring Kitty's CSS-style padding
     syntax:
