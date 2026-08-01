@@ -38,13 +38,16 @@ split. That means every tab and split inside that window changes together.
 ## Commands
 
 `FontReset`
-: Restore Kitty's active config by dropping the temporary overrides. Also restores window padding back to `kitty.conf`.
+: Restore Kitty's active config by dropping the temporary overrides. Note: padding is not included in this reset — use `:PaddingReset` instead.
 
 `FontPick`
 : Open `vim.ui.select()` with fonts discovered asynchronously from `fc-list`.
 
+`PaddingReset`
+: Reset Kitty window padding to the value in `kitty.conf` using `kitty @ set-spacing padding=default`.
+
 `PaddingSet [top] [right] [bottom] [left]`
-: Set Kitty `window_padding_width` to the given value(s). Accepts 0–4 space-separated numeric values, mirroring Kitty's own CSS-style padding syntax. Passing no arguments applies the configured `padding` value. Example: `:PaddingSet 0 0`.
+: Set Kitty window padding using `kitty @ set-spacing`. Accepts 0–4 space-separated numeric values, mirroring Kitty's own CSS-style padding syntax. Passing no arguments applies the configured `padding` value. Example: `:PaddingSet 0 0`.
 
 `PaddingIncrease`
 : Increase padding by `padding_step`.
