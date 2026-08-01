@@ -1,0 +1,131 @@
+*kitty-font.nvim* Temporarily switch Kitty fonts from Neovim
+
+==============================================================================
+INTRODUCTION                                        *kitty-font-introduction*
+
+kitty-font.nvim lets Neovim control Kitty's font family, font size, and
+window padding for the current session. Font and padding changes apply to the
+entire Kitty OS window (all tabs and splits). On exit, the plugin restores
+Kitty's previous configuration.
+
+==============================================================================
+SETUP                                                      *kitty-font-setup*
+
+The plugin is loaded automatically when Neovim starts. Pass options to
+|require("kitty-font").setup()| in your init.lua:
+
+>lua
+    require("kitty-font").setup({
+      font_family = "IosevkaTerm Nerd Font",   -- nil = uses kitty.conf
+      font_size   = 16,                         -- nil = uses kitty.conf
+      padding     = "0 0",                      -- nil = uses kitty.conf
+      restore_on_exit = true,                   -- restore on VimLeavePre
+    })
+<
+
+Options~
+
+    font_family ~
+        Default kitty font family. When set, applied on startup.
+        |kitty-font.FontSet|
+
+    font_size ~
+        Default kitty font size in points. When set, applied on startup.
+        |kitty-font.FontSet|
+
+    padding ~
+        Default window padding. Accepts 1-4 space-separated numeric values
+        (CSS-style). When set, applied on startup.
+        |kitty-font.PaddingSet|
+        When nil (the default), kitty.conf's configured value is used.
+        Use |kitty-font.PaddingReset| at runtime to return to that value.
+
+    restore_on_exit ~
+        If true (the default), the plugin restores Kitty's font and size on
+        VimLeavePre.
+
+==============================================================================
+COMMANDS                                                  *kitty-font-commands*
+
+                                                  *kitty-font.FontReset*
+:FontReset
+    Restore Kitty's active config by dropping temporary overrides.
+    Note: padding is not affected. Use |kitty-font.PaddingReset| instead.
+
+                                                    *kitty-font.FontPick*
+:FontPick
+    Open |vim.ui.select()| with fonts discovered from `fc-list`. Selecting
+    one switches Kitty to that font immediately via `kitty @ load-config`.
+
+                                                   *kitty-font.PaddingSet*
+:[range]PaddingSet [top] [right] [bottom] [left]
+    Set Kitty window padding using `kitty @ set-spacing`. Accepts 0-4
+    space-separated numeric values mirroring Kitty's CSS-style padding
+    syntax:
+      1 value  -> padding (all sides)
+      2 values -> padding-v, padding-h
+      3 values -> padding-top, padding-h, padding-bottom
+      4 values -> padding-top, padding-right, padding-bottom, padding-left
+    Passing no arguments applies the configured `padding` value from setup.
+
+                                                 *kitty-font.PaddingReset*
+:PaddingReset
+    Reset Kitty window padding to the value in kitty.conf using
+    `kitty @ set-spacing --all --configured padding=default`.
+
+==============================================================================
+API                                                          *kitty-font-api*
+
+The Lua module exposes the following functions via the return value of
+|require("kitty-font")|.
+
+                                                  *kitty-font.setup()*
+setup(opts?)
+    Configure and activate the plugin. See |kitty-font-setup|.
+
+                                                    *kitty-font.apply()*
+apply(opts?)                                              *kitty-font.FontSet*
+    Apply the configured font_family and font_size to Kitty.
+
+                                                     *kitty-font.reset()*
+reset(opts?)                                              *kitty-font.FontReset*
+    Reset Kitty font to its pre-plugin configuration.
+
+                                                  *kitty-font.get_fonts()*
+get_fonts()
+    Return a list of font names from `fc-list`. Synchronous.
+
+                                                       *kitty-font.pick()*
+pick(opts?)                                               *kitty-font.FontPick*
+    Open |vim.ui.select()| to pick a font interactively.
+
+                                                 *kitty-font.set_padding()*
+set_padding(padding, opts?)                               *kitty-font.PaddingSet*
+    Apply the given padding value to Kitty. `padding` can be a string of
+    1-4 space-separated numbers, a single number, or nil (uses the configured
+    default).
+
+                                              *kitty-font.reset_padding()*
+reset_padding(opts?)                                      *kitty-font.PaddingReset*
+    Reset Kitty padding to the value in kitty.conf.
+
+                                                      *kitty-font.health()*
+health()
+    Return the health check module. Run |:checkhealth| kitty-font to
+    verify prerequisites.
+
+==============================================================================
+REQUIREMENTS                                          *kitty-font-requirements*
+
+- Kitty terminal emulator
+- `fc-list` (from fontconfig)
+- `KITTY_LISTEN_ON` environment variable (set automatically when running
+  Neovim inside Kitty; must be exported manually otherwise)
+
+==============================================================================
+AUTHOR                                                        *kitty-font-author*
+
+Maintained by nitinbhat972.
+Contributions at <https://github.com/nitinbhat972/kitty-font.nvim>.
+
+ vim:tw=78:ts=8:ft=help:norl:
