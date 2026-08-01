@@ -18,6 +18,8 @@ integration is refined.
 require("kitty-font").setup({
   font_family = "IosevkaTerm Nerd Font", -- default nil, uses kitty.conf
   font_size = 16, -- default nil, uses kitty.conf
+  padding = "0 0", -- default nil, uses kitty.conf; accepts 1–4 values (CSS-style)
+  padding_step = 2, -- default: 2
   restore_on_exit = true, -- default: true
 })
 ```
@@ -36,10 +38,19 @@ split. That means every tab and split inside that window changes together.
 ## Commands
 
 `FontReset`
-: Restore Kitty's active config by dropping the temporary overrides.
+: Restore Kitty's active config by dropping the temporary overrides. Also restores window padding back to `kitty.conf`.
 
 `FontPick`
 : Open `vim.ui.select()` with fonts discovered asynchronously from `fc-list`.
+
+`PaddingSet [top] [right] [bottom] [left]`
+: Set Kitty `window_padding_width` to the given value(s). Accepts 0–4 space-separated numeric values, mirroring Kitty's own CSS-style padding syntax. Passing no arguments applies the configured `padding` value. Example: `:PaddingSet 0 0`.
+
+`PaddingIncrease`
+: Increase padding by `padding_step`.
+
+`PaddingDecrease`
+: Decrease padding by `padding_step`, clamped at 0.
 
 ## Health
 
