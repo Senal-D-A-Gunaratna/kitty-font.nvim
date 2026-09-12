@@ -20,6 +20,7 @@ The plugin is loaded automatically when Neovim starts. Pass options to
       font_size   = 16,                         -- nil = uses kitty.conf
       padding     = "0 0",                      -- nil = uses kitty.conf
       restore_on_exit = true,                   -- restore on VimLeavePre
+      fullscreen_toggle_hook = "pkill -SIGUSR1 waybar", -- nil = no hook
     })
 <
 
@@ -42,7 +43,17 @@ Options~
 
     restore_on_exit ~
         If true (the default), the plugin restores Kitty's font and size and
-        resets window padding to kitty.conf on VimLeavePre.
+        resets window padding to kitty.conf on VimLeavePre. If Kitty is
+        still fullscreen at exit, `fullscreen_toggle_hook` (if set) is run
+        synchronously first, so companion tools (e.g. waybar) get restored
+        before Neovim quits.
+
+    fullscreen_toggle_hook ~
+        Shell command run after toggling Kitty fullscreen via
+        |kitty-font.FullscreenToggle|. Runs detached/async; a nonzero exit
+        code notifies a warning unless called with `{ silent = true }`.
+        Default nil (no hook runs). Useful for hiding companion bars, e.g.
+        `"pkill -SIGUSR1 waybar"` to toggle a waybar signal-module.
 
 ==============================================================================
 COMMANDS                                                  *kitty-font-commands*
@@ -81,6 +92,12 @@ COMMANDS                                                  *kitty-font-commands*
 :KittyApply
     Apply all configured font_family, font_size, and padding opts to Kitty.
 
+                                          *kitty-font.FullscreenToggle*
+:FullscreenToggle
+    Toggle Kitty fullscreen via `kitty @ action toggle_fullscreen`, then
+    run the configured `fullscreen_toggle_hook` (if set) as a detached
+    shell command.
+
 ==============================================================================
 API                                                          *kitty-font-api*
 
@@ -107,6 +124,11 @@ reset(opts?)
 restore(opts?)
     Reset both the Kitty font and window padding to their kitty.conf
     values.
+
+                                        *kitty-font.toggle_fullscreen()*
+toggle_fullscreen(opts?)
+    Toggle Kitty fullscreen, then run `fullscreen_toggle_hook` (if set)
+    as a detached shell command. See |kitty-font.FullscreenToggle|.
 
                                                   *kitty-font.get_fonts()*
 get_fonts()

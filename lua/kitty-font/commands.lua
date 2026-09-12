@@ -53,6 +53,13 @@ function M.setup(api)
     desc = "Apply configured Kitty font and padding settings",
     force = true,
   })
+
+  vim.api.nvim_create_user_command("FullscreenToggle", function()
+    api.toggle_fullscreen()
+  end, {
+    desc = "Toggle Kitty fullscreen",
+    force = true,
+  })
 end
 
 return M

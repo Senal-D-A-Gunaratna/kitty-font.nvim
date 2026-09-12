@@ -14,6 +14,7 @@ local autocmds = require("kitty-font.autocmds")
 ---@field apply_all fun(opts?: kitty_font.ApplyOpts): boolean?, string?
 ---@field reset fun(opts?: kitty_font.ApplyOpts): boolean?, string?
 ---@field restore fun(opts?: kitty_font.ApplyOpts): boolean?, string?
+---@field toggle_fullscreen fun(opts?: kitty_font.ApplyOpts): boolean?, string?
 ---@field get_fonts fun(): string[]
 ---@field pick fun(opts?: kitty_font.ApplyOpts)
 ---@field set_padding fun(padding?: string|number, opts?: kitty_font.ApplyOpts): boolean?, string?
@@ -159,6 +160,37 @@ function M.restore(opts)
 
   if not opts.silent then
     notify("Restored Kitty font and padding settings")
+  end
+
+  return true
+end
+
+---@param opts kitty_font.ApplyOpts?
+---@return boolean?, string?
+function M.toggle_fullscreen(opts)
+  opts = opts or {}
+
+  local result, err = kitty.toggle_fullscreen()
+  if not result then
+    if not opts.silent then
+      notify("FullscreenToggle: " .. err, vim.log.levels.ERROR)
+    end
+
+    return nil, err
+  end
+
+  if is_set(M.config.fullscreen_toggle_hook) then
+    vim.system({ "sh", "-c", M.config.fullscreen_toggle_hook }, {}, function(hook_result)
+      if hook_result.code ~= 0 and not opts.silent then
+        vim.schedule(function()
+          notify("FullscreenToggleHook: exited " .. hook_result.code, vim.log.levels.WARN)
+        end)
+      end
+    end)
+  end
+
+  if not opts.silent then
+    notify("Toggled Kitty fullscreen")
   end
 
   return true
